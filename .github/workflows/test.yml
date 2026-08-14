@@ -8,8 +8,13 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  portable:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,6 +28,12 @@ jobs:
       - run: uv run ruff check .
       - run: uv run pytest
       - run: uv run dsskill-doctor check skills/deepseek-skill-doctor --strict
+
+  upstream-validator:
+    runs-on: ubuntu-latest
+    needs: portable
+    steps:
+      - uses: actions/checkout@v4
       - name: Install pinned upstream validator
         run: |
           curl --fail --location --silent --show-error \
