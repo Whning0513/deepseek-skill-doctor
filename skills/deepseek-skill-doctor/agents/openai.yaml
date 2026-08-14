@@ -1,0 +1,4 @@
+interface:
+  display_name: "DeepSeek Skill Doctor"
+  short_description: "Check Agent Skills for DeepSeek and DSH pitfalls"
+  default_prompt: "Use $deepseek-skill-doctor to check this Agent Skill for DSH discovery, routing, portability, and DeepSeek-specific protocol pitfalls."
