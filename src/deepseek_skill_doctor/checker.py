@@ -82,7 +82,7 @@ def _discover_direct_bundles(root: Path, report: Report) -> list[Path]:
         for child in sorted(root.iterdir(), key=lambda item: item.name)
         if child.is_dir() and not child.is_symlink() and _skill_file(child) is not None
     ]
-    direct_files = {(_skill_file(bundle) or Path()).resolve() for bundle in bundles}
+    direct_files = {_skill_file(bundle) for bundle in bundles}
 
     for current, directories, files in os.walk(root, followlinks=False):
         directories[:] = sorted(
@@ -93,7 +93,7 @@ def _discover_direct_bundles(root: Path, report: Report) -> list[Path]:
         for filename in files:
             if filename.lower() != "skill.md":
                 continue
-            candidate = (Path(current) / filename).resolve()
+            candidate = Path(current) / filename
             if candidate in direct_files:
                 continue
             relative = candidate.relative_to(root)
