@@ -20,10 +20,10 @@ TRIGGER_MARKER = re.compile(
     re.IGNORECASE,
 )
 HOST_SKILL_PATH = re.compile(
-    r"(?:~?/)?(?:\.claude|\.codex|\.cursor|\.gemini)/skills(?:/|\b)",
+    r"(?:~?[\\/])?(?:\.claude|\.codex|\.cursor|\.gemini)[\\/]skills(?:[\\/]|\b)",
     re.IGNORECASE,
 )
-SHARED_SKILL_PATH = re.compile(r"(?:\.agents|\.dsh)/skills(?:/|\b)", re.IGNORECASE)
+SHARED_SKILL_PATH = re.compile(r"(?:\.agents|\.dsh)[\\/]skills(?:[\\/]|\b)", re.IGNORECASE)
 REASONING_SYNTHESIS = re.compile(
     r"(?:invent|fabricat\w*|synthesi[sz]\w*|make\s+up|placeholder|dummy|伪造|编造|占位)"
     r".{0,100}reasoning_content",

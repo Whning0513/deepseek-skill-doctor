@@ -62,3 +62,30 @@ def test_nested_symlinked_skill_is_reported_without_resolving_outside_root(tmp_p
     assert "DSH_NESTED_SKILL_UNDISCOVERED" in {item.code for item in report.findings}
     assert "NO_SKILLS_FOUND" in {item.code for item in report.findings}
 
+
+def _windows_path_skill(tmp_path: Path, body: str):
+    skill = tmp_path / "windows-path-skill"
+    skill.mkdir()
+    (skill / "SKILL.md").write_text(
+        "---\nname: windows-path-skill\ndescription: Use this skill when checking paths.\n---\n"
+        f"\n{body}\n",
+        encoding="utf-8",
+    )
+    return check_path(skill)
+
+
+def test_windows_host_skill_path_is_detected(tmp_path: Path) -> None:
+    report = _windows_path_skill(tmp_path, r"Install under `C:\Users\me\.claude\skills\agent`.")
+
+    assert "HOST_PATH_LOCK_IN" in {item.code for item in report.findings}
+
+
+def test_windows_shared_skill_path_satisfies_portability_rule(tmp_path: Path) -> None:
+    body = (
+        r"Install under `C:\Users\me\.claude\skills\agent` or "
+        r"`.agents\skills\agent`."
+    )
+    report = _windows_path_skill(tmp_path, body)
+
+    assert "HOST_PATH_LOCK_IN" not in {item.code for item in report.findings}
+
